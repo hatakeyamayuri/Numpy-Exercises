@@ -8,23 +8,26 @@ def generate(board_inuse):
     value = value_list[0]
 
     full_list = []
-    for index, val in enumerate(np.nditer(board_inuse)):
+    #("board_inuse", board_inuse)
+    for index, val in enumerate(np.nditer(board_inuse, order='C')):
         if int(val) != 0:
             full_list.append(index)
 
     if np.size(board_inuse) - len(full_list) == 0:
         global current
-        print("Lost")
+        print("You Lost")
         current = False
 
     else:
         full_set = set(full_list)
+        #print("full", full_set)
         available_indices = [i for i in range(np.size(board_inuse)) if i not in full_set]
         comp_val = rand.choice(available_indices)
 
         row = comp_val // 4
         col = comp_val % 4
         position_coor = row, col
+        #print(position_coor)
 
         board_inuse[position_coor] = value
         return board_inuse
@@ -89,7 +92,9 @@ def user_movement(key_pressed, board_inuse):
             for index, full_val in enumerate(temp):
                 update_board[index_outer, index] = full_val
             
+        #print(update_board)
         update_board = np.transpose(update_board)
+        #print(update_board)
             
     if keys.is_pressed("down"):
         for index_outer, col in enumerate(np.transpose(board_inuse)):
@@ -109,8 +114,10 @@ def user_movement(key_pressed, board_inuse):
                         deleted += 1
             for index, full_val in enumerate(temp):
                 update_board[index_outer, (3-index)] = full_val  
-        
+
+        #print(update_board)
         update_board = np.transpose(update_board)
+        #print(update_board)
 
     if key_pressed == "delete":
         global current
